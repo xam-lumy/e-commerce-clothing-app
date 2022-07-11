@@ -1,0 +1,50 @@
+useEffect(() => {
+        (async() => {
+            const response = await getRedirectResult(auth);
+            if(response) {
+                const userDocRef = await createUserDocumentFromAuth(response.user);
+            }
+        } ) ();
+    },[]);
+<button onClick={signInWithGoogleRedirect}></button>
+
+const defaultLoginFields = {
+    email: '',
+    password:''
+}
+const Login= () => {
+    [loginFields, setLoginFields] = useState(defaultLoginFields)
+     const {email, password} = loginFields
+
+
+
+    const onHandSubmit= (event) =>{
+        
+    }
+
+
+
+    const onHandChange= (event) =>{
+        const {name, value} = event.target;
+        setLoginFields(...loginFields, name[value])
+    }
+
+
+    return(
+        <form onSubmit={onHandSubmit}>
+            <input type ='email' onChange= {onHandChange} name='email' value={email} />
+            <input type ='password' onChange= {onHandChange} name='password' value={password} />
+        </form>
+    )
+}
+
+<div key={id}>
+                        <h2>{name}</h2>
+                        <span>{quantity}</span>
+                        <br />
+                        <span onClick={()=> removeItemToCart(cartItem)}>decrement</span>
+                        <br />
+                        <span onClick={()=> addItemToCart(cartItem)}>increment</span>
+                        <br />
+                        
+                    </div>

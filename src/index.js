@@ -1,56 +1,43 @@
 import React from 'react';
- import {render} from 'react-dom';
-import { createRoot } from 'react-dom/client';
+// import  ReactDOM  from 'react-dom';
+import {render} from 'react-dom';
+// import { createRoot } from 'react-dom/client';
  import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { Elements } from '@stripe/react-stripe-js';
 
+import { store, persistor } from './store/store';
 import App from './App';
-import {UserProvider} from './contexts/user.context';
-import {CategoriesProvider} from './contexts/categories.context';
-import { CartProvider } from './contexts/cart.context';
-
-
-import reportWebVitals from './reportWebVitals';
-
+// import { CartProvider } from './contexts/cart.context';
+import reportWebVitals from './reportWebVitals'
+import { stripePromise } from './utils/stripe.utils';
 import './index.scss';
 
 
 
-// const rootElement = document.getElementById('root')
-
-// render(
-//   <React.StrictMode>
-//    <BrowserRouter>
-//      <UserProvider>
-//        <CategoriesProvider>
-//          <App />
-//        </CategoriesProvider>
-//      </UserProvider>
-//    </BrowserRouter>
-//  </React.StrictMode>, 
-//  rootElement
-// )
 
 
+const rootElement = document.getElementById('root');
 
-
-const container = document.getElementById('root');
-const root =createRoot(container);
-root.render(
+render(
   <React.StrictMode>
-   <BrowserRouter>
-    <UserProvider>
-      <CategoriesProvider>
-        <CartProvider>
+    <Provider store={store}>
+     <PersistGate loading={null} persistor={persistor}>
+       <BrowserRouter>
+        <Elements stripe={stripePromise}>
           <App />
-        </CartProvider>
-      </CategoriesProvider>
-    </UserProvider>
-   </BrowserRouter>
-  </React.StrictMode>
-)
+        </Elements>    
+       </BrowserRouter>
+     </PersistGate>
+   </Provider>
+  </React.StrictMode>,
+  rootElement
+
+);
 
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
- reportWebVitals();
+reportWebVitals();

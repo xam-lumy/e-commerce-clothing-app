@@ -64,13 +64,15 @@ const firebaseConfig = {
     const q = query(collectionRef);
 
     const querySnapshot = await getDocs(q);
-    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot) =>{
-      const { title, items } = docSnapshot.data();
-      acc[title.toLowerCase()] = items;
-      return acc;
-    }, {})
+    return querySnapshot.docs.map(docSnapShot => docSnapShot.data());
+    
+    // .reduce((acc, docSnapshot) =>{
+    //   const { title, items } = docSnapshot.data();
+    //   acc[title.toLowerCase()] = items;
+    //   return acc;
+    // }, {})
 
-    return categoryMap;
+    // return categoryMap;
 
   }
 
@@ -104,7 +106,7 @@ const firebaseConfig = {
       }
     }
 
-    return userDocRef;
+    return userSnapshot;
   }
 
   export const createAuthUserWithEmailAndPassword= async(email, password)=>{
@@ -126,3 +128,16 @@ const firebaseConfig = {
   onAuthStateChanged(auth, callback)
 
   export const signOutUser = async() => await signOut(auth);
+
+  export const getCurrentUser = () => {
+    return new Promise((resolve, reject) => {
+      const unSubscribe = onAuthStateChanged(
+        auth,
+        (userAuth) => {
+          unSubscribe();
+          resolve(userAuth);
+        },
+        reject
+      )
+    })
+  }
